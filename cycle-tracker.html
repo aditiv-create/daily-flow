@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your gentle companion through every phase of your cycle">
+    <meta name="theme-color" content="#FFB5C2">
+    <link rel="manifest" href="manifest.json">
+    <title>Daily Flow - Cycle Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Mali:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --menstrual-primary: #FFB5C2;
+            --menstrual-secondary: #FFF0F3;
+            --menstrual-accent: #FF6B9D;
+            
+            --follicular-primary: #FFE066;
+            --follicular-secondary: #FFF9E5;
+            --follicular-accent: #FFC700;
+            
+            --ovulatory-primary: #A8E6CF;
+            --ovulatory-secondary: #F0FFF7;
+            --ovulatory-accent: #56C596;
+            
+            --luteal-primary: #C9B4E8;
+            --luteal-secondary: #F5F0FF;
+            --luteal-accent: #9B7BC7;
+            
+            --text-dark: #2D3748;
+            --text-light: #718096;
+        }
+
+        body {
+            font-family: 'Mali', cursive;
+            background: linear-gradient(135deg, var(--bg-color, #FFF9E5) 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Doodle decorations */
+        .doodle-star {
+            position: absolute;
+            font-size: 24px;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .doodle-heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        /* Intro Screen */
+        .intro-screen {
+            max-width: 600px;
+            margin: 60px auto;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 3px solid var(--phase-color, #FFB5C2);
+            position: relative;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .intro-screen::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
+            border-radius: 33px;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        .intro-title {
+            font-family: 'Caveat', cursive;
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--phase-accent, #FF6B9D);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .intro-subtitle {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px 20px;
+            font-family: 'Mali', cursive;
+            font-size: 18px;
+            border: 3px solid var(--phase-color, #FFB5C2);
+            border-radius: 15px;
+            background: white;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--phase-accent, #FF6B9D);
+            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+
+        .start-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Main App Layout */
+        .app-layout {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Progress Panel */
+        .progress-panel {
+            width: 320px;
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 3px solid var(--phase-color, #FFB5C2);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .panel-header {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--phase-accent, #FF6B9D);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .phase-badge {
+            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .task-item {
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 12px;
+            background: var(--phase-secondary, #FFF0F3);
+            border-left: 4px solid var(--phase-color, #FFB5C2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .task-item.active {
+            background: var(--phase-color, #FFB5C2);
+            color: white;
+            font-weight: 600;
+            animation: celebrate 0.5s ease;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .task-icon {
+            font-size: 20px;
+        }
+
+        .task-time {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 3px solid var(--phase-color, #FFB5C2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px dashed var(--phase-color, #FFB5C2);
+        }
+
+        .step-title {
+            font-family: 'Caveat', cursive;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--phase-accent, #FF6B9D);
+        }
+
+        .step-time {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 24px;
+            color: var(--phase-accent, #FF6B9D);
+            background: var(--phase-secondary, #FFF0F3);
+            padding: 10px 20px;
+            border-radius: 15px;
+        }
+
+        .step-content {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .task-description {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: var(--text-dark);
+        }
+
+        .task-list {
+            background: var(--phase-secondary, #FFF0F3);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .task-list h3 {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 24px;
+            color: var(--phase-accent, #FF6B9D);
+            margin-bottom: 15px;
+        }
+
+        .task-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 16px;
+        }
+
+        .task-list li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .nav-button {
+            padding: 12px 24px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 18px;
+            border: 2px solid var(--phase-color, #FFB5C2);
+            border-radius: 15px;
+            background: white;
+            color: var(--phase-accent, #FF6B9D);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background: var(--phase-secondary, #FFF0F3);
+            transform: translateY(-2px);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .action-button {
+            flex: 1;
+            max-width: 300px;
+            padding: 20px 30px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 22px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transition: left 0.5s ease;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        .completed-button {
+            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
+            color: white;
+        }
+
+        .completed-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        .skip-button {
+            background: linear-gradient(135deg, #E2E8F0, #CBD5E0);
+            color: var(--text-dark);
+        }
+
+        .skip-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+
+        /* Sticky Notes */
+        .sticky-note {
+            background: linear-gradient(135deg, #FFF9C4, #FFF59D);
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            margin: 30px auto;
+            max-width: 500px;
+            transform: rotate(-1deg);
+            position: relative;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .sticky-note::before {
+            content: '📌';
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 30px;
+        }
+
+        .sticky-note.success {
+            background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+        }
+
+        .sticky-note.comfort {
+            background: linear-gradient(135deg, #E1BEE7, #CE93D8);
+        }
+
+        .sticky-message {
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .completion-screen h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--phase-accent, #FF6B9D);
+            margin-bottom: 20px;
+        }
+
+        .completion-screen p {
+            font-size: 22px;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
+            .progress-panel {
+                width: 100%;
+                position: static;
+            }
+
+            .main-content {
+                padding: 25px;
+            }
+
+            .step-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-button {
+                max-width: 100%;
+            }
+
+            .intro-title {
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Decorative Doodles -->
+    <div class="doodle-star" style="top: 5%; left: 10%;">✨</div>
+    <div class="doodle-star" style="top: 15%; right: 15%;">⭐</div>
+    <div class="doodle-heart" style="top: 40%; left: 5%;">💖</div>
+    <div class="doodle-heart" style="top: 60%; right: 8%;">💕</div>
+    <div class="doodle-star" style="bottom: 10%; left: 20%;">✨</div>
+
+    <div class="container">
+        <!-- Intro Screen -->
+        <div id="intro-screen" class="intro-screen">
+            <h1 class="intro-title">Daily Flow ✨</h1>
+            <p class="intro-subtitle">Your gentle companion through every phase of your cycle</p>
+            
+            <div class="input-group">
+                <label class="input-label">What day of your cycle are you on?</label>
+                <input type="number" id="cycle-day" min="1" max="28" placeholder="Enter 1-28" required>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">What day is today?</label>
+                <select id="week-day" required>
+                    <option value="">Select a day...</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                </select>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="button" class="nav-button" onclick="loadSavedData()" id="load-saved-btn" style="display: none;">
+                    Load Previous Session 📂
+                </button>
+            </div>
+            
+            <button class="start-button" onclick="startApp()">Let's Begin! 🌸</button>
+        </div>
+
+        <!-- Main App (Hidden Initially) -->
+        <div id="main-app" class="hidden">
+            <div class="app-layout">
+                <!-- Progress Panel -->
+                <div class="progress-panel">
+                    <h2 class="panel-header">Today's Flow</h2>
+                    <div id="phase-badge" class="phase-badge"></div>
+                    <div id="task-list"></div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <div id="step-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Phase data structure
+        const phaseData = {
+            menstrual: {
+                name: 'Menstrual Phase',
+                days: '1-7',
+                color: '#FFB5C2',
+                secondary: '#FFF0F3',
+                accent: '#FF6B9D',
+                tone: 'gentle and comforting',
+                steps: [
+                    {
+                        time: '07:30–08:30',
+                        title: 'Wake & Soft Start',
+                        icon: '🌅',
+                        description: 'Good morning, lovely! Take it slow today. Your body is doing important work.',
+                        tasks: [
+                            'Drink a big glass of water beside your bed',
+                            'Open blinds or step to a window for 3–5 minutes of light',
+                            'Quick warm shower or bath to relax cramps',
+                            'Light stretch: neck rolls, cat-cow, hip circles (5–10 min)',
+                            'Warm, easy breakfast (oats with milk/protein, or toast with paneer/tofu)',
+                            'Portions: Protein 1 palm; Carbs 1 handful; Fats 1 thumb; Veggies/fruit 1 fist'
+                        ]
+                    },
+                    {
+                        time: '09:00–11:00',
+                        title: 'Career Block 1',
+                        icon: '💼',
+                        description: 'One focused task is plenty today. Quality over quantity.',
+                        tasks: [
+                            'One focused session for applications or portfolio work',
+                            'Use a lo-fi or focus playlist',
+                            'Keep only necessary tabs open',
+                            'Goal: 1–2 good applications, not perfection'
+                        ]
+                    },
+                    {
+                        time: '11:00–12:30',
+                        title: 'Gentle Midday',
+                        icon: '🚶‍♀️',
+                        description: 'Time to move gently and nourish yourself.',
+                        tasks: [
+                            'Snack: yogurt + fruit + nuts or a small sandwich',
+                            'Short 10–15 minute walk, even indoors',
+                            'Finish 1st water bottle (~800–900 ml) by now'
+                        ]
+                    },
+                    {
+                        time: '12:30–14:00',
+                        title: 'Lunch & Rest',
+                        icon: '🍽️',
+                        description: 'Warm, comforting food and a moment to pause.',
+                        tasks: [
+                            'Warm meal: dal, rice, veggies, yogurt or khichdi',
+                            'Portions: Veggies 2 fists; Protein 1–2 palms; Carbs 1–2 handfuls; Fat 1 thumb',
+                            'Eat away from laptop when possible',
+                            'Phone down for first few minutes'
+                        ]
+                    },
+                    {
+                        time: '14:00–16:00',
+                        title: 'Flexible Block',
+                        icon: '📋',
+                        description: 'Light admin or rest—you choose what feels right.',
+                        tasks: [
+                            'Option A: Light admin (emails, organizing files, checking tracker)',
+                            'Option B: Rest, nap (20–30 min), gentle reading',
+                            'One tiny thing is enough today',
+                            'Complete 2nd water bottle by 17:00 (~1.6–1.8 L total)'
+                        ]
+                    },
+                    {
+                        time: '16:00–17:30',
+                        title: 'Movement Time',
+                        icon: '🏃‍♀️',
+                        description: 'Move in whatever way feels good to your body right now.',
+                        tasks: [
+                            'If energy okay: shortened gym session (reduce 1 set, lighter weights)',
+                            'If energy low: 20–30 min gentle walk or easy swim',
+                            'Minimum win: 10–15 minutes movement and stretching'
+                        ]
+                    },
+                    {
+                        time: '17:30–19:30',
+                        title: 'Dinner & Unwind',
+                        icon: '🍜',
+                        description: 'Warm, nourishing food and time to decompress.',
+                        tasks: [
+                            'Warm dinner: rice + dal + sabzi, or tofu stir-fry with noodles',
+                            'Portions: Veggies 2 fists; Protein 1–2 palms; Carbs 1 handful; Fat 1 thumb',
+                            'Avoid very salty/greasy foods to reduce bloating',
+                            'Finish 3rd water bottle by ~21:00 (~2.4–2.7 L total)'
+                        ]
+                    },
+                    {
+                        time: '19:30–21:00',
+                        title: 'Evening Rituals',
+                        icon: '🛁',
+                        description: 'Second bath and soothing rituals to close the day.',
+                        tasks: [
+                            'Second bath/shower to relax muscles',
+                            'Skincare and body lotion as grounding ritual',
+                            'Light stretching or yoga (5–10 min) if body wants it'
+                        ]
+                    },
+                    {
+                        time: '21:00–23:00',
+                        title: 'Wind-down & Sleep',
+                        icon: '🌙',
+                        description: 'Let your mind and body rest. You did enough today.',
+                        tasks: [
+                            'No more applications or intense screens',
+                            'Brain-dump racing thoughts onto paper',
+                            'Dim lights, cosy clothes, herbal tea (caffeine-free)',
+                            'Short journaling: "What did I manage today?"',
+                            'In bed between 22:30–23:30'
+                        ]
+                    }
+                ]
+            },
+            follicular: {
+                name: 'Late Follicular Phase',
+                days: '8-13',
+                color: '#FFE066',
+                secondary: '#FFF9E5',
+                accent: '#FFC700',
+                tone: 'energetic and building',
+                steps: [
+                    {
+                        time: '07:30–08:30',
+                        title: 'Wake, Water, Bath',
+                        icon: '☀️',
+                        description: 'Good morning! Your energy is building. Let\'s make the most of it!',
+                        tasks: [
+                            'Big glass of water and open blinds for light',
+                            'Short morning shower or bath',
+                            'Dynamic stretch: 5–10 squats, arm circles, hip openers',
+                            'Higher protein breakfast (Greek yogurt + fruit + granola, or tofu scramble + toast)',
+                            'Portions: Protein 1–2 palms; Carbs 1–2 handfuls; Fats 1 thumb; Veg/fruit 1–2 fists'
+                        ]
+                    },
+                    {
+                        time: '08:30–10:30',
+                        title: 'Career Block 1',
+                        icon: '🚀',
+                        description: 'Deep work time! Your brain is sharp—use this window wisely.',
+                        tasks: [
+                            'Main application/portfolio block of the day',
+                            'Target: 2–3 strong applications or one major project chunk',
+                            'No phone except during short breaks'
+                        ]
+                    },
+                    {
+                        time: '10:30–12:00',
+                        title: 'Snack & Walk',
+                        icon: '🥗',
+                        description: 'Quick break to recharge.',
+                        tasks: [
+                            'Snack: hummus with veg/crackers, nuts + fruit, or protein bar',
+                            'Short 10–15 minute walk to clear head',
+                            'Finish most of 1st water bottle by 12:00'
+                        ]
+                    },
+                    {
+                        time: '12:00–13:30',
+                        title: 'Lunch',
+                        icon: '🥙',
+                        description: 'Fuel up with a colorful, balanced meal.',
+                        tasks: [
+                            'Big, colorful bowl: veggies + whole grains + plant protein',
+                            'Example: quinoa, tofu/paneer, roast veg, tahini/yogurt dressing',
+                            'Portions: Veggies 2 fists; Protein 1–2 palms; Carbs 1–2 handfuls; Fat 1–2 thumbs'
+                        ]
+                    },
+                    {
+                        time: '13:30–15:30',
+                        title: 'Career Block 2',
+                        icon: '💻',
+                        description: 'Networking, updates, or study time.',
+                        tasks: [
+                            'Networking emails, LinkedIn updates, school work',
+                            'If brain feels tired: swap to reading or creative tasks',
+                            'Minimum: 45–60 minutes of focus',
+                            'Complete 2nd water bottle (~1.6–1.8 L total)'
+                        ]
+                    },
+                    {
+                        time: '16:00–17:30',
+                        title: 'Gym: Full Session',
+                        icon: '💪',
+                        description: 'Time for your full workout! Your body is ready.',
+                        tasks: [
+                            'Follow programmed workout for today',
+                            'Keep rest periods 60–90 seconds',
+                            'Focus on form, track weight increases',
+                            'Pre-gym snack: banana, dates, or toast with peanut butter'
+                        ]
+                    },
+                    {
+                        time: '17:30–19:30',
+                        title: 'Dinner & Chill',
+                        icon: '🍲',
+                        description: 'Post-workout refuel and relaxation.',
+                        tasks: [
+                            'Dinner: stir-fry tofu/tempeh + veg + rice/noodles; or dal, sabzi, chapati',
+                            'Portions: Veggies 2 fists; Protein 1–2 palms; Carbs 1–2 handfuls; Fat 1 thumb',
+                            'Finish 3rd water bottle by ~21:00 (2.5–3 L total)'
+                        ]
+                    },
+                    {
+                        time: '19:30–21:00',
+                        title: 'Gentle Evening',
+                        icon: '✨',
+                        description: 'Wind down and separate day from night.',
+                        tasks: [
+                            'Light tidy of room/desk',
+                            'Second bath/shower; cosy clothes',
+                            'No serious work after this point'
+                        ]
+                    },
+                    {
+                        time: '21:00–23:00',
+                        title: 'Wind-down & Sleep',
+                        icon: '🌜',
+                        description: 'Protect your sleep even when energy is high.',
+                        tasks: [
+                            'Screen dimming or blue-light filter',
+                            'Write tomorrow\'s top 3 tasks',
+                            'Journal: one win, one gratitude, one thing to move forward',
+                            'In bed by ~23:00'
+                        ]
+                    }
+                ]
+            },
+            ovulatory: {
+                name: 'Ovulatory / Early Luteal',
+                days: '14-21',
+                color: '#A8E6CF',
+                secondary: '#F0FFF7',
+                accent: '#56C596',
+                tone: 'confident and social',
+                steps: [
+                    {
+                        time: '07:30–08:30',
+                        title: 'Wake & Check-In',
+                        icon: '🌟',
+                        description: 'How\'s your energy today? Let\'s check in with yourself.',
+                        tasks: [
+                            'Water and light as usual',
+                            'Quick body scan: "Energy from 1–10?"',
+                            'Short bath or shower',
+                            'Breakfast: smoothie with protein + fruit + seeds, or avocado toast + tofu',
+                            'Portions: Protein 1–2 palms; Carbs 1–2 handfuls; Fats 1–2 thumbs; Veg/fruit 1–2 fists'
+                        ]
+                    },
+                    {
+                        time: '08:30–10:30',
+                        title: 'Power Focus',
+                        icon: '⚡',
+                        description: 'Use your sharp focus and confidence!',
+                        tasks: [
+                            'Deep project work: applications needing thought, portfolio edits, test tasks',
+                            'Use sharper focus in this window',
+                            '1–2 high-quality outputs vs. many shallow ones'
+                        ]
+                    },
+                    {
+                        time: '10:30–12:00',
+                        title: 'Walk & Tasks',
+                        icon: '🚶',
+                        description: 'Movement and light admin.',
+                        tasks: [
+                            '10–15 minute walk or mobility',
+                            'Respond to easy emails or set up calls/interviews',
+                            'Finish 1st water bottle by lunch'
+                        ]
+                    },
+                    {
+                        time: '12:00–13:30',
+                        title: 'Lunch',
+                        icon: '🥣',
+                        description: 'Balanced meal with extra complex carbs.',
+                        tasks: [
+                            'Extra complex carbs to support upcoming luteal phase',
+                            'Example: chickpea salad + veg + bread; or brown rice, dal, mixed sabzi',
+                            'Portions: Veggies 2 fists; Protein 1–2 palms; Carbs 2 handfuls; Fat 1 thumb'
+                        ]
+                    },
+                    {
+                        time: '13:30–15:30',
+                        title: 'Outreach & Social',
+                        icon: '📧',
+                        description: 'Perfect time for networking and connection.',
+                        tasks: [
+                            'Networking messages, follow-ups, LinkedIn posts',
+                            'Emails to professors or mentors',
+                            'If energy dips: shorten to 60 min, rest instead'
+                        ]
+                    },
+                    {
+                        time: '16:00–17:30',
+                        title: 'Training or Cardio',
+                        icon: '🏋️',
+                        description: 'Strong workout or cardio—you\'ve got this!',
+                        tasks: [
+                            'Strong gym day or cardio',
+                            'Keep intensity but avoid ego lifting—prioritise form',
+                            'Cardio/swim: steady pace, moderate intensity',
+                            'Pre-workout snack: fruit + nuts or yogurt'
+                        ]
+                    },
+                    {
+                        time: '17:30–19:30',
+                        title: 'Dinner & Soft Landing',
+                        icon: '🍛',
+                        description: 'Nourish and notice any mood/sleep shifts.',
+                        tasks: [
+                            'Dinner: tofu/tempeh stir-fry, dal + sabzi, or veg + grain bowl',
+                            'Complete 3rd water bottle by 21:00 (2.5–3 L total)',
+                            'Notice if mood or sleep start shifting'
+                        ]
+                    },
+                    {
+                        time: '19:30–21:00',
+                        title: 'Gentle Reset',
+                        icon: '🛀',
+                        description: 'Second bath as a mental switch-off.',
+                        tasks: [
+                            'Second bath/shower; hard mental switch-off',
+                            'Skincare, comfy clothes, soft lighting',
+                            'Short stretch or walk if body feels restless'
+                        ]
+                    },
+                    {
+                        time: '21:00–23:00',
+                        title: 'Gentle Evening',
+                        icon: '🌙',
+                        description: 'Ease into rest mode.',
+                        tasks: [
+                            'Avoid deep career spirals or heavy conversations',
+                            'Journal: "What do I need more of? What less of heading toward PMS?"',
+                            'In bed ~22:30–23:00'
+                        ]
+                    }
+                ]
+            },
+            luteal: {
+                name: 'Late Luteal / PMS',
+                days: '22-28',
+                color: '#C9B4E8',
+                secondary: '#F5F0FF',
+                accent: '#9B7BC7',
+                tone: 'compassionate and minimal',
+                steps: [
+                    {
+                        time: '07:30–08:30',
+                        title: 'Slow Wake',
+                        icon: '🌤️',
+                        description: 'Take it slow today. Gentle is the goal.',
+                        tasks: [
+                            'Water and light, but softer start',
+                            'Short bath/shower if it feels good',
+                            'Breakfast: calm energy foods (oats, chia pudding, toast + paneer/tofu)',
+                            'Portions: Protein 1–2 palms; Carbs 1–2 handfuls; Fats 1 thumb; Veg/fruit 1 fist'
+                        ]
+                    },
+                    {
+                        time: '09:00–10:30',
+                        title: 'Bare-Minimum Win',
+                        icon: '🎯',
+                        description: 'One priority is enough today.',
+                        tasks: [
+                            'Choose ONE main priority: 1–2 applications or one email chain',
+                            'No multi-tasking',
+                            'Declare success once that one thing is done',
+                            'If focus low: 3 x 20 min bursts with 5 min breaks'
+                        ]
+                    },
+                    {
+                        time: '10:30–12:00',
+                        title: 'Decompress',
+                        icon: '🌸',
+                        description: 'Light movement and gentle snacking.',
+                        tasks: [
+                            'Short walk (10–15 min) or gentle stretching',
+                            'Snack: protein + healthy fat (nuts + fruit, yogurt, hummus)',
+                            'Finish 1st water bottle, sipping not chugging'
+                        ]
+                    },
+                    {
+                        time: '12:00–13:30',
+                        title: 'Lunch',
+                        icon: '🍲',
+                        description: 'Warm, comforting food.',
+                        tasks: [
+                            'Warm food: khichdi, soup + bread, dal + rice, veggie stew',
+                            'Portions: Veggies 2 fists; Protein 1–2 palms; Carbs 1–2 handfuls; Fat 1 thumb',
+                            'Keep salty/ultra-processed foods moderate'
+                        ]
+                    },
+                    {
+                        time: '13:30–15:30',
+                        title: 'Optional Light Block',
+                        icon: '📝',
+                        description: 'Admin only—or rest if you need it.',
+                        tasks: [
+                            'Admin only: file organization, tracking, prepping docs',
+                            'If body says no: rest, read, or something soothing',
+                            'Finish 2nd water bottle (~1.6–1.8 L total)'
+                        ]
+                    },
+                    {
+                        time: '16:00–17:00',
+                        title: 'Gentle Movement',
+                        icon: '🧘',
+                        description: 'Low-impact only today.',
+                        tasks: [
+                            'Minimum: 10–20 min low-impact (walk, dance, cycling, yoga)',
+                            'If gym: switch to machines, reduce weight and sets',
+                            'Skip heavy compound lifts if joints feel unstable'
+                        ]
+                    },
+                    {
+                        time: '17:00–19:30',
+                        title: 'Dinner & Soft Evening',
+                        icon: '🍜',
+                        description: 'Warm, satisfying dinner and cravings management.',
+                        tasks: [
+                            'Dinner: warm, satisfying, not too heavy/oily',
+                            'If cravings: pair sweets with protein/fiber (chocolate + nuts)',
+                            'Finish 3rd water bottle by ~21:00, including herbal teas'
+                        ]
+                    },
+                    {
+                        time: '19:30–21:00',
+                        title: 'Comfort Ritual',
+                        icon: '💜',
+                        description: 'Extra comfort for cramps and emotions.',
+                        tasks: [
+                            'Second bath/long shower for cramps; warm water',
+                            'Comfy clothes, favorite blanket, cosy show/reading',
+                            'Minimal stimulation: avoid emotional social media'
+                        ]
+                    },
+                    {
+                        time: '21:00–23:00',
+                        title: 'Grounding & Sleep',
+                        icon: '🌛',
+                        description: 'You\'re doing great. Lower output is normal.',
+                        tasks: [
+                            'Longer wind-down: 30+ min away from screens',
+                            'Grounding: 5 see, 4 touch, 3 hear, 2 smell, 1 taste',
+                            'Remind: lower output this week is normal, not a flaw',
+                            'In bed ~22:30–23:30; calm breathing if cramps wake you'
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Gym schedule
+        const gymSchedule = {
+            'Sunday': {
+                name: 'Push Day',
+                icon: '💪',
+                exercises: [
+                    'Incline Smith Press: 3 sets x 4–6 reps',
+                    'Overhead Shoulder Press: 3 sets x 4–7 reps',
+                    'Machine reverse flies or Chest fly: 3 sets x 6–8 reps',
+                    'Overhead tricep extensions: 3 sets x 6–8 reps',
+                    'Cable tricep pushdowns: 2 sets x 6–8 reps'
+                ]
+            },
+            'Monday': {
+                name: 'Pull Day',
+                icon: '🔙',
+                exercises: [
+                    'Lat Pulldown: 3 sets x 6–8 reps',
+                    'T-Bar Rows: 3 sets x 4–8 reps',
+                    'Tucked Cable Rows: 3 sets x 6–8 reps',
+                    'Preacher dumbbell curls: 3 sets x 6–8 reps',
+                    'Core: leg raises: 3 sets x 8 reps',
+                    'Core: cable crunches: 3 sets x 8 reps'
+                ]
+            },
+            'Tuesday': {
+                name: 'Glutes & Hamstrings',
+                icon: '🍑',
+                exercises: [
+                    'Reverse leg curls: 3 sets x 6–8 reps',
+                    'Romanian deadlifts: 3 sets x 6–8 reps',
+                    'Smith machine squats (feet forward): 4 sets x 6–8 reps',
+                    'Hip thrusts: 4 sets x 6–8 reps'
+                ]
+            },
+            'Wednesday': {
+                name: 'Cardio Day',
+                icon: '🏊',
+                exercises: [
+                    'Swim at steady, comfortable pace'
+                ]
+            },
+            'Thursday': {
+                name: 'Quad Day',
+                icon: '🦵',
+                exercises: [
+                    'Bulgarian squats: 3 sets x 6–8 reps',
+                    'Smith machine squats (normal stance): 3 sets x 6–8 reps',
+                    'Leg extensions: 4 sets x 6–8 reps',
+                    'Calf raises: 4 sets x 6–8 reps',
+                    'Optional core at the end'
+                ]
+            },
+            'Friday': {
+                name: 'Active Rest',
+                icon: '🚶‍♀️',
+                exercises: [
+                    'Walk with Delicia (easy social pace, 30–60 minutes)'
+                ]
+            },
+            'Saturday': {
+                name: 'Fun Movement',
+                icon: '🏓',
+                exercises: [
+                    'Pickleball (length and intensity based on energy)'
+                ]
+            }
+        };
+
+        let currentPhase = null;
+        let currentDay = null;
+        let currentStepIndex = 0;
+        let completedSteps = [];
+
+        // Auto-detect today's day and check for saved data on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const today = new Date().getDay();
+            document.getElementById('week-day').value = days[today];
+
+            // Check for saved session
+            const savedData = localStorage.getItem('dailyFlowSession');
+            if (savedData) {
+                document.getElementById('load-saved-btn').style.display = 'inline-block';
+            }
+
+            // Register service worker for PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
+        });
+
+        // Save state to localStorage
+        function saveState() {
+            const state = {
+                currentPhase,
+                currentDay,
+                currentStepIndex,
+                completedSteps,
+                cycleDay: document.getElementById('cycle-day').value,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('dailyFlowSession', JSON.stringify(state));
+        }
+
+        // Load saved data
+        function loadSavedData() {
+            const savedData = localStorage.getItem('dailyFlowSession');
+            if (savedData) {
+                const state = JSON.parse(savedData);
+                document.getElementById('cycle-day').value = state.cycleDay;
+                document.getElementById('week-day').value = state.currentDay;
+
+                currentPhase = state.currentPhase;
+                currentDay = state.currentDay;
+                currentStepIndex = state.currentStepIndex;
+                completedSteps = state.completedSteps;
+
+                const phase = phaseData[currentPhase];
+                document.documentElement.style.setProperty('--phase-color', phase.color);
+                document.documentElement.style.setProperty('--phase-secondary', phase.secondary);
+                document.documentElement.style.setProperty('--phase-accent', phase.accent);
+                document.documentElement.style.setProperty('--bg-color', phase.secondary);
+
+                document.getElementById('intro-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+
+                renderProgressPanel();
+                showStep(currentStepIndex);
+            }
+        }
+
+        function getPhase(day) {
+            if (day >= 1 && day <= 7) return 'menstrual';
+            if (day >= 8 && day <= 13) return 'follicular';
+            if (day >= 14 && day <= 21) return 'ovulatory';
+            if (day >= 22 && day <= 28) return 'luteal';
+            return 'menstrual';
+        }
+
+        function startApp() {
+            const cycleDay = parseInt(document.getElementById('cycle-day').value);
+            const weekDay = document.getElementById('week-day').value;
+
+            if (!cycleDay || cycleDay < 1 || cycleDay > 28 || !weekDay) {
+                alert('Please fill in both fields! 💕');
+                return;
+            }
+
+            currentDay = weekDay;
+            currentPhase = getPhase(cycleDay);
+            const phase = phaseData[currentPhase];
+
+            // Update CSS variables
+            document.documentElement.style.setProperty('--phase-color', phase.color);
+            document.documentElement.style.setProperty('--phase-secondary', phase.secondary);
+            document.documentElement.style.setProperty('--phase-accent', phase.accent);
+            document.documentElement.style.setProperty('--bg-color', phase.secondary);
+
+            // Hide intro, show app
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+
+            // Render progress panel
+            renderProgressPanel();
+            
+            // Show first step
+            showStep(0);
+            saveState();
+        }
+
+        function renderProgressPanel() {
+            const phase = phaseData[currentPhase];
+            const gym = gymSchedule[currentDay];
+            
+            document.getElementById('phase-badge').innerHTML = `
+                ${phase.name}<br>
+                <small style="font-size: 14px; opacity: 0.9;">Days ${phase.days} · ${currentDay}</small>
+            `;
+
+            let taskHTML = '';
+            phase.steps.forEach((step, index) => {
+                const isActive = index === currentStepIndex;
+                const isCompleted = completedSteps.includes(index);
+                const classes = `task-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`;
+                
+                taskHTML += `
+                    <div class="${classes}" onclick="showStep(${index})">
+                        <span class="task-icon">${step.icon}</span>
+                        <div style="flex: 1;">
+                            <div class="task-time">${step.time}</div>
+                            <div style="font-size: 14px;">${step.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('task-list').innerHTML = taskHTML;
+        }
+
+        function showStep(index) {
+            currentStepIndex = index;
+            const phase = phaseData[currentPhase];
+            const step = phase.steps[index];
+            const gym = gymSchedule[currentDay];
+            saveState();
+
+            let tasksHTML = '<ul>';
+            step.tasks.forEach(task => {
+                tasksHTML += `<li>${task}</li>`;
+            });
+            tasksHTML += '</ul>';
+
+            // Add gym info if this is movement time
+            let gymSection = '';
+            if (step.title.includes('Movement') || step.title.includes('Gym') || step.title.includes('Training')) {
+                gymSection = `
+                    <div class="task-list">
+                        <h3>${gym.icon} Today's Workout: ${gym.name}</h3>
+                        <ul>
+                            ${gym.exercises.map(ex => `<li>${ex}</li>`).join('')}
+                        </ul>
+                        <p style="margin-top: 15px; font-style: italic; color: var(--text-light);">
+                            ${currentPhase === 'menstrual' || currentPhase === 'luteal' 
+                                ? 'Remember: Modify as needed. Lighter weights and reduced sets are perfectly fine today.' 
+                                : 'You\'ve got the energy for this! Focus on form and progressive overload.'}
+                        </p>
+                    </div>
+                `;
+            }
+
+            const content = `
+                <div class="nav-buttons">
+                    <button class="nav-button" onclick="showStep(${index - 1})" ${index === 0 ? 'disabled' : ''}>
+                        ← Previous
+                    </button>
+                    <button class="nav-button" onclick="showStep(${index + 1})" ${index === phase.steps.length - 1 ? 'disabled' : ''}>
+                        Next →
+                    </button>
+                    <button class="nav-button" onclick="resetApp()" style="margin-left: auto;">
+                        🏠 Start Over
+                    </button>
+                </div>
+                <div class="step-header">
+                    <h2 class="step-title">${step.icon} ${step.title}</h2>
+                    <div class="step-time">${step.time}</div>
+                </div>
+                <div class="step-content">
+                    <p class="task-description">${step.description}</p>
+                    <div class="task-list">
+                        <h3>Let's do this:</h3>
+                        ${tasksHTML}
+                    </div>
+                    ${gymSection}
+                    <div class="action-buttons">
+                        <button class="action-button completed-button" onclick="completeStep()">
+                            ✓ Completed! 🎉
+                        </button>
+                        <button class="action-button skip-button" onclick="skipStep()">
+                            Couldn't do it 💙
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('step-content').innerHTML = content;
+            renderProgressPanel();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetApp() {
+            if (confirm('Are you sure you want to start over? This will clear your progress.')) {
+                localStorage.removeItem('dailyFlowSession');
+                location.reload();
+            }
+        }
+
+        function completeStep() {
+            if (!completedSteps.includes(currentStepIndex)) {
+                completedSteps.push(currentStepIndex);
+            }
+            saveState();
+
+            const phase = phaseData[currentPhase];
+            const encouragement = [
+                "Amazing work! You're taking such good care of yourself! ✨",
+                "That's the energy! You're doing great! 🌟",
+                "Look at you go! So proud of you! 💖",
+                "You're crushing it today! Keep going! 🎯",
+                "Beautiful work! Your body thanks you! 🌸",
+                "Yes! That's how it's done! 💪",
+                "You're being so kind to yourself today! 💕"
+            ];
+
+            const randomEncouragement = encouragement[Math.floor(Math.random() * encouragement.length)];
+
+            if (currentStepIndex < phase.steps.length - 1) {
+                const nextStep = phase.steps[currentStepIndex + 1];
+                const stickyNote = `
+                    <div class="sticky-note success">
+                        <div class="sticky-message">
+                            ${randomEncouragement}<br><br>
+                            Next up: ${nextStep.icon} ${nextStep.title}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('step-content').innerHTML = stickyNote;
+                
+                setTimeout(() => {
+                    showStep(currentStepIndex + 1);
+                }, 2500);
+            } else {
+                showCompletion();
+            }
+        }
+
+        function skipStep() {
+            const phase = phaseData[currentPhase];
+            
+            const comfortMessages = [
+                "It's totally okay! Every day is different. 💙",
+                "No worries at all! Just showing up matters. 🌈",
+                "That's completely fine! Be gentle with yourself. ☁️",
+                "All good! Tomorrow is a new opportunity. ✨",
+                "It happens! You're still doing amazing. 💜",
+                "Don't worry! Rest is productive too. 🌙"
+            ];
+
+            const randomComfort = comfortMessages[Math.floor(Math.random() * comfortMessages.length)];
+
+            if (currentStepIndex < phase.steps.length - 1) {
+                const nextStep = phase.steps[currentStepIndex + 1];
+                const stickyNote = `
+                    <div class="sticky-note comfort">
+                        <div class="sticky-message">
+                            ${randomComfort}<br><br>
+                            Let's move on: ${nextStep.icon} ${nextStep.title}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('step-content').innerHTML = stickyNote;
+                
+                setTimeout(() => {
+                    showStep(currentStepIndex + 1);
+                }, 2500);
+            } else {
+                showCompletion();
+            }
+        }
+
+        function showCompletion() {
+            const phase = phaseData[currentPhase];
+            const completionRate = Math.round((completedSteps.length / phase.steps.length) * 100);
+            
+            let message = '';
+            if (completionRate === 100) {
+                message = "You completed EVERYTHING today! Absolutely incredible! 🎉✨";
+            } else if (completionRate >= 70) {
+                message = "You did so much today! That's wonderful! 🌟💖";
+            } else if (completionRate >= 40) {
+                message = "You showed up and did your best! That's what matters! 💙🌸";
+            } else {
+                message = "You made it through the day! That alone is an achievement! 💜☁️";
+            }
+
+            const completion = `
+                <div class="completion-screen">
+                    <h2>Day Complete! 🌙</h2>
+                    <p>${message}</p>
+                    <p style="font-size: 28px; margin: 30px 0;">
+                        You completed ${completedSteps.length} out of ${phase.steps.length} tasks
+                    </p>
+                    <div class="sticky-note success" style="margin: 40px auto;">
+                        <div class="sticky-message">
+                            Remember: Progress isn't perfection.<br>
+                            You're exactly where you need to be. ✨
+                        </div>
+                    </div>
+                    <button class="restart-button" onclick="location.reload()">
+                        Start New Day 🌸
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('step-content').innerHTML = completion;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
