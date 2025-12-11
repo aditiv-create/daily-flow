@@ -1009,7 +1009,7 @@
     <div class="doodle-star" style="bottom: 10%; left: 20%;">✨</div>
 
     <!-- Settings Icon -->
-    <div class="settings-icon" onclick="openSettings()" id="settings-btn">
+    <div class="settings-icon hidden" onclick="openSettings()" id="settings-btn">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="10" cy="10" r="3"/>
             <path d="M10 1v2m0 14v2M4.22 4.22l1.42 1.42m8.68 8.68l1.42 1.42M1 10h2m14 0h2M4.22 15.78l1.42-1.42m8.68-8.68l1.42-1.42"/>
@@ -1691,14 +1691,26 @@
                 currentStepIndex = state.currentStepIndex;
                 completedSteps = state.completedSteps;
 
+                // Apply saved color theme if exists
+                const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{}');
+                const theme = settings.accentColor ? colorThemes[settings.accentColor] : null;
                 const phase = phaseData[currentPhase];
-                document.documentElement.style.setProperty('--phase-color', phase.color);
-                document.documentElement.style.setProperty('--phase-secondary', phase.secondary);
-                document.documentElement.style.setProperty('--phase-accent', phase.accent);
-                document.documentElement.style.setProperty('--bg-color', phase.secondary);
+
+                // Update CSS variables with custom theme or default phase colors
+                if (theme) {
+                    document.documentElement.style.setProperty('--phase-color', theme.primary);
+                    document.documentElement.style.setProperty('--phase-secondary', theme.secondary);
+                    document.documentElement.style.setProperty('--phase-accent', theme.accent);
+                } else {
+                    document.documentElement.style.setProperty('--phase-color', phase.color);
+                    document.documentElement.style.setProperty('--phase-secondary', phase.secondary);
+                    document.documentElement.style.setProperty('--phase-accent', phase.accent);
+                }
+                document.documentElement.style.setProperty('--bg-color', theme ? theme.secondary : phase.secondary);
 
                 document.getElementById('intro-screen').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
+                document.getElementById('settings-btn').classList.remove('hidden');
 
                 renderProgressPanel();
                 showStep(currentStepIndex);
@@ -1726,15 +1738,26 @@
             currentPhase = getPhase(cycleDay);
             const phase = phaseData[currentPhase];
 
-            // Update CSS variables
-            document.documentElement.style.setProperty('--phase-color', phase.color);
-            document.documentElement.style.setProperty('--phase-secondary', phase.secondary);
-            document.documentElement.style.setProperty('--phase-accent', phase.accent);
-            document.documentElement.style.setProperty('--bg-color', phase.secondary);
+            // Apply saved color theme if exists
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{}');
+            const theme = settings.accentColor ? colorThemes[settings.accentColor] : null;
 
-            // Hide intro, show app
+            // Update CSS variables with custom theme or default phase colors
+            if (theme) {
+                document.documentElement.style.setProperty('--phase-color', theme.primary);
+                document.documentElement.style.setProperty('--phase-secondary', theme.secondary);
+                document.documentElement.style.setProperty('--phase-accent', theme.accent);
+            } else {
+                document.documentElement.style.setProperty('--phase-color', phase.color);
+                document.documentElement.style.setProperty('--phase-secondary', phase.secondary);
+                document.documentElement.style.setProperty('--phase-accent', phase.accent);
+            }
+            document.documentElement.style.setProperty('--bg-color', theme ? theme.secondary : phase.secondary);
+
+            // Hide intro, show app and settings button
             document.getElementById('intro-screen').classList.add('hidden');
             document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('settings-btn').classList.remove('hidden');
 
             // Render progress panel
             renderProgressPanel();
