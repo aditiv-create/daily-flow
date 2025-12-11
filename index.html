@@ -1051,6 +1051,18 @@
             </div>
 
             <div class="settings-section">
+                <h3 class="settings-section-title">Life Stage</h3>
+                <div class="settings-option">
+                    <label>Select your current stage</label>
+                    <select id="life-stage" style="width: 100%;" onchange="updateLifeStage(this.value)">
+                        <option value="young">Young Professional / Early Career</option>
+                        <option value="perimenopause">Perimenopause (40s)</option>
+                        <option value="menopause">Menopause / Retirement</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
                 <h3 class="settings-section-title">Cycle Length</h3>
                 <div class="settings-option">
                     <label>Average cycle length (days)</label>
@@ -1574,73 +1586,228 @@
         };
 
         // Gym schedule
-        const gymSchedule = {
-            'Sunday': {
-                name: 'Push Day',
-                icon: '💪',
-                exercises: [
-                    'Incline Smith Press: 3 sets x 4–6 reps',
-                    'Overhead Shoulder Press: 3 sets x 4–7 reps',
-                    'Machine reverse flies or Chest fly: 3 sets x 6–8 reps',
-                    'Overhead tricep extensions: 3 sets x 6–8 reps',
-                    'Cable tricep pushdowns: 2 sets x 6–8 reps'
-                ]
+        // Gym schedules by life stage
+        const gymSchedules = {
+            young: {
+                'Sunday': {
+                    name: 'Push Day',
+                    icon: '💪',
+                    exercises: [
+                        'Incline Smith Press: 3 sets x 4–6 reps',
+                        'Overhead Shoulder Press: 3 sets x 4–7 reps',
+                        'Machine reverse flies or Chest fly: 3 sets x 6–8 reps',
+                        'Overhead tricep extensions: 3 sets x 6–8 reps',
+                        'Cable tricep pushdowns: 2 sets x 6–8 reps'
+                    ]
+                },
+                'Monday': {
+                    name: 'Pull Day',
+                    icon: '🔙',
+                    exercises: [
+                        'Lat Pulldown: 3 sets x 6–8 reps',
+                        'T-Bar Rows: 3 sets x 4–8 reps',
+                        'Tucked Cable Rows: 3 sets x 6–8 reps',
+                        'Preacher dumbbell curls: 3 sets x 6–8 reps',
+                        'Core: leg raises: 3 sets x 8 reps',
+                        'Core: cable crunches: 3 sets x 8 reps'
+                    ]
+                },
+                'Tuesday': {
+                    name: 'Glutes & Hamstrings',
+                    icon: '🍑',
+                    exercises: [
+                        'Reverse leg curls: 3 sets x 6–8 reps',
+                        'Romanian deadlifts: 3 sets x 6–8 reps',
+                        'Smith machine squats (feet forward): 4 sets x 6–8 reps',
+                        'Hip thrusts: 4 sets x 6–8 reps'
+                    ]
+                },
+                'Wednesday': {
+                    name: 'Cardio Day',
+                    icon: '🏊',
+                    exercises: [
+                        'Swim at steady, comfortable pace (30-45 min)'
+                    ]
+                },
+                'Thursday': {
+                    name: 'Quad Day',
+                    icon: '🦵',
+                    exercises: [
+                        'Bulgarian squats: 3 sets x 6–8 reps',
+                        'Smith machine squats (normal stance): 3 sets x 6–8 reps',
+                        'Leg extensions: 4 sets x 6–8 reps',
+                        'Calf raises: 4 sets x 6–8 reps',
+                        'Optional core at the end'
+                    ]
+                },
+                'Friday': {
+                    name: 'Active Rest',
+                    icon: '🚶‍♀️',
+                    exercises: [
+                        'Easy walk (30–60 min) or light yoga'
+                    ]
+                },
+                'Saturday': {
+                    name: 'Fun Movement',
+                    icon: '🏓',
+                    exercises: [
+                        'Pickleball, dance, or any enjoyable activity'
+                    ]
+                }
             },
-            'Monday': {
-                name: 'Pull Day',
-                icon: '🔙',
-                exercises: [
-                    'Lat Pulldown: 3 sets x 6–8 reps',
-                    'T-Bar Rows: 3 sets x 4–8 reps',
-                    'Tucked Cable Rows: 3 sets x 6–8 reps',
-                    'Preacher dumbbell curls: 3 sets x 6–8 reps',
-                    'Core: leg raises: 3 sets x 8 reps',
-                    'Core: cable crunches: 3 sets x 8 reps'
-                ]
+            perimenopause: {
+                'Sunday': {
+                    name: 'Lower Body + Core',
+                    icon: '🦵',
+                    exercises: [
+                        'Squats or Chair Sit-to-Stand: 2-3 sets x 8-12 reps',
+                        'Dumbbell Romanian Deadlift: 2-3 sets x 8-12 reps',
+                        'Step-Ups (low bench): 2-3 sets x 8-10 reps each leg',
+                        'Static Lunge: 2-3 sets x 8 reps each leg',
+                        'Calf Raises: 2 sets x 12-15 reps',
+                        'Dead Bugs: 2 sets x 8-10 each side',
+                        'Side Plank: 15-30 sec each side'
+                    ]
+                },
+                'Monday': {
+                    name: 'Cardio + Mobility',
+                    icon: '🚴‍♀️',
+                    exercises: [
+                        'Brisk walk or cycling: 25-35 min (moderate pace)',
+                        'Hip flexor stretch',
+                        'Hamstring stretch',
+                        'Chest opener against wall',
+                        'Gentle spinal twists'
+                    ]
+                },
+                'Tuesday': {
+                    name: 'Upper Body + Core',
+                    icon: '💪',
+                    exercises: [
+                        'Incline Push-Ups: 2-3 sets x 8-12 reps',
+                        'Dumbbell Chest Press: 2-3 sets x 8-12 reps',
+                        'Dumbbell Row: 2-3 sets x 8-12 reps',
+                        'Seated Shoulder Press: 2-3 sets x 8-10 reps',
+                        'Biceps Curls: 2 sets x 10-12 reps',
+                        'Triceps Pushdowns: 2 sets x 10-12 reps',
+                        'Bird Dogs: 2 sets x 8-10 each side'
+                    ]
+                },
+                'Wednesday': {
+                    name: 'Cardio / Fun Movement',
+                    icon: '🏊',
+                    exercises: [
+                        '30-45 min walk, cycling, or swimming',
+                        'Dance class or pickleball (optional)'
+                    ]
+                },
+                'Thursday': {
+                    name: 'Full-Body Strength',
+                    icon: '🏋️‍♀️',
+                    exercises: [
+                        'Goblet Squat: 2-3 sets x 8-10 reps',
+                        'Hip Thrust: 2-3 sets x 10-12 reps',
+                        'Dumbbell Row: 2-3 sets x 8-12 reps',
+                        'Dumbbell Chest Press: 2-3 sets x 8-12 reps',
+                        'Dumbbell RDL: 2-3 sets x 8-10 reps',
+                        'Pallof Press: 2 sets x 10-12 each side'
+                    ]
+                },
+                'Friday': {
+                    name: 'Gentle Movement',
+                    icon: '🧘‍♀️',
+                    exercises: [
+                        '20-30 min easy walk or yoga',
+                        'Light stretching',
+                        'Optional gentle core work'
+                    ]
+                },
+                'Saturday': {
+                    name: 'Rest or Light Activity',
+                    icon: '☁️',
+                    exercises: [
+                        'Full rest or short gentle walk if feeling good',
+                        'Focus on recovery and hydration'
+                    ]
+                }
             },
-            'Tuesday': {
-                name: 'Glutes & Hamstrings',
-                icon: '🍑',
-                exercises: [
-                    'Reverse leg curls: 3 sets x 6–8 reps',
-                    'Romanian deadlifts: 3 sets x 6–8 reps',
-                    'Smith machine squats (feet forward): 4 sets x 6–8 reps',
-                    'Hip thrusts: 4 sets x 6–8 reps'
-                ]
-            },
-            'Wednesday': {
-                name: 'Cardio Day',
-                icon: '🏊',
-                exercises: [
-                    'Swim at steady, comfortable pace'
-                ]
-            },
-            'Thursday': {
-                name: 'Quad Day',
-                icon: '🦵',
-                exercises: [
-                    'Bulgarian squats: 3 sets x 6–8 reps',
-                    'Smith machine squats (normal stance): 3 sets x 6–8 reps',
-                    'Leg extensions: 4 sets x 6–8 reps',
-                    'Calf raises: 4 sets x 6–8 reps',
-                    'Optional core at the end'
-                ]
-            },
-            'Friday': {
-                name: 'Active Rest',
-                icon: '🚶‍♀️',
-                exercises: [
-                    'Walk with Delicia (easy social pace, 30–60 minutes)'
-                ]
-            },
-            'Saturday': {
-                name: 'Fun Movement',
-                icon: '🏓',
-                exercises: [
-                    'Pickleball (length and intensity based on energy)'
-                ]
+            menopause: {
+                'Sunday': {
+                    name: 'Full-Body Strength',
+                    icon: '💪',
+                    exercises: [
+                        'Squats or Sit-to-Stands: 2 sets x 8-12 reps',
+                        'Hip Hinges (light weight RDLs): 2 sets x 8-12 reps',
+                        'Chest Press or Wall Push-Ups: 2 sets x 8-12 reps',
+                        'Rows (dumbbells or bands): 2 sets x 8-12 reps',
+                        'Bird Dogs: 2 sets x 8-10 each side',
+                        'Side Steps (for balance): 2 sets x 10 each side'
+                    ]
+                },
+                'Monday': {
+                    name: 'Cardio (Low-Impact)',
+                    icon: '🚶‍♀️',
+                    exercises: [
+                        'Brisk walk: 30-40 min',
+                        'Or gentle swimming',
+                        'Or comfortable cycling'
+                    ]
+                },
+                'Tuesday': {
+                    name: 'Flexibility & Balance',
+                    icon: '🧘‍♀️',
+                    exercises: [
+                        'Gentle yoga or Pilates: 20-30 min',
+                        'Hip flexor stretch',
+                        'Hamstring stretch',
+                        'Shoulder rolls',
+                        'Balance practice (single leg stands)'
+                    ]
+                },
+                'Wednesday': {
+                    name: 'Full-Body Strength',
+                    icon: '🏋️‍♀️',
+                    exercises: [
+                        'Squats (chair support if needed): 2 sets x 10 reps',
+                        'Incline Push-Ups: 2 sets x 8-10 reps',
+                        'Lat Pulldown or Band Pulls: 2 sets x 10-12 reps',
+                        'Glute Bridges: 2 sets x 12-15 reps',
+                        'Core work (dead bugs or planks): 2 sets'
+                    ]
+                },
+                'Thursday': {
+                    name: 'Gentle Cardio',
+                    icon: '🚴‍♀️',
+                    exercises: [
+                        'Walking, swimming, or dancing: 30 min',
+                        'Keep intensity comfortable and enjoyable'
+                    ]
+                },
+                'Friday': {
+                    name: 'Stretching & Recovery',
+                    icon: '☁️',
+                    exercises: [
+                        '20-30 min gentle stretching',
+                        'Foam rolling or self-massage',
+                        'Gentle movement or rest'
+                    ]
+                },
+                'Saturday': {
+                    name: 'Social Movement',
+                    icon: '👥',
+                    exercises: [
+                        'Walk with a friend',
+                        'Group class or gentle activity',
+                        'Gardening or leisure activity'
+                    ]
+                }
             }
         };
+
+        function getGymSchedule() {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{"lifeStage": "young"}');
+            return gymSchedules[settings.lifeStage] || gymSchedules.young;
+        }
 
         let currentPhase = null;
         let currentDay = null;
@@ -1769,6 +1936,7 @@
 
         function renderProgressPanel() {
             const phase = phaseData[currentPhase];
+            const gymSchedule = getGymSchedule();
             const gym = gymSchedule[currentDay];
             
             document.getElementById('phase-badge').innerHTML = `
@@ -1800,6 +1968,7 @@
             currentStepIndex = index;
             const phase = phaseData[currentPhase];
             const step = phase.steps[index];
+            const gymSchedule = getGymSchedule();
             const gym = gymSchedule[currentDay];
             saveState();
 
@@ -2038,7 +2207,7 @@
         }
 
         function loadSettings() {
-            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{"accentColor": "rose", "showIcons": true, "compactMode": false, "cycleLength": 28}');
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{"accentColor": "rose", "showIcons": true, "compactMode": false, "cycleLength": 28, "lifeStage": "young"}');
 
             // Load accent color
             document.querySelectorAll('.color-option').forEach(option => {
@@ -2052,6 +2221,7 @@
             document.getElementById('toggle-icons').classList.toggle('active', settings.showIcons);
             document.getElementById('toggle-compact').classList.toggle('active', settings.compactMode);
             document.getElementById('cycle-length').value = settings.cycleLength;
+            document.getElementById('life-stage').value = settings.lifeStage;
 
             // Apply compact mode if enabled
             if (settings.compactMode) {
@@ -2104,6 +2274,18 @@
             const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{}');
             settings.cycleLength = parseInt(length);
             localStorage.setItem('dailyFlowSettings', JSON.stringify(settings));
+        }
+
+        function updateLifeStage(stage) {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{}');
+            settings.lifeStage = stage;
+            localStorage.setItem('dailyFlowSettings', JSON.stringify(settings));
+
+            // Refresh the workout display if we're currently viewing one
+            if (currentPhase && currentDay) {
+                renderProgressPanel();
+                showStep(currentStepIndex);
+            }
         }
 
         // Load settings on page load
