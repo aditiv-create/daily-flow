@@ -1,6 +1,6 @@
 const CACHE_NAME = 'daily-flow-v1';
 const urlsToCache = [
-  '/cycle-tracker.html',
+  '/index.html',
   '/manifest.json'
 ];
 

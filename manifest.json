@@ -2,7 +2,7 @@
   "name": "Daily Flow - Cycle Companion",
   "short_name": "Daily Flow",
   "description": "Your gentle companion through every phase of your cycle",
-  "start_url": "/cycle-tracker.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFB5C2",
