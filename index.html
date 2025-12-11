@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#FFB5C2">
     <link rel="manifest" href="manifest.json">
     <title>Daily Flow - Cycle Companion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Patrick+Hand&family=Mali:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -16,55 +16,51 @@
         }
 
         :root {
-            --menstrual-primary: #FFB5C2;
-            --menstrual-secondary: #FFF0F3;
-            --menstrual-accent: #FF6B9D;
-            
-            --follicular-primary: #FFE066;
-            --follicular-secondary: #FFF9E5;
-            --follicular-accent: #FFC700;
-            
-            --ovulatory-primary: #A8E6CF;
-            --ovulatory-secondary: #F0FFF7;
-            --ovulatory-accent: #56C596;
-            
-            --luteal-primary: #C9B4E8;
-            --luteal-secondary: #F5F0FF;
-            --luteal-accent: #9B7BC7;
-            
-            --text-dark: #2D3748;
-            --text-light: #718096;
+            /* Japandi base colors */
+            --cream: #FAF7F0;
+            --warm-white: #FFFEF9;
+            --charcoal: #3A3A3A;
+            --warm-gray: #8B7D6B;
+            --light-gray: #E8E4DC;
+
+            /* Girly accent colors - muted and sophisticated */
+            --menstrual-primary: #D4A5A5;
+            --menstrual-secondary: #F5EDED;
+            --menstrual-accent: #B88B8B;
+
+            --follicular-primary: #E8D5B7;
+            --follicular-secondary: #F9F5ED;
+            --follicular-accent: #C9A86A;
+
+            --ovulatory-primary: #B8CDB8;
+            --ovulatory-secondary: #EFF5EF;
+            --ovulatory-accent: #8FAA8F;
+
+            --luteal-primary: #C4B5D4;
+            --luteal-secondary: #F2EEF7;
+            --luteal-accent: #9D88B3;
+
+            --text-dark: #3A3A3A;
+            --text-light: #8B7D6B;
+            --border-light: #E8E4DC;
         }
 
         body {
-            font-family: 'Mali', cursive;
-            background: linear-gradient(135deg, var(--bg-color, #FFF9E5) 0%, #FFFFFF 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--cream);
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 19px, var(--border-light) 19px, var(--border-light) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, var(--border-light) 19px, var(--border-light) 20px);
+            background-size: 20px 20px;
             min-height: 100vh;
             color: var(--text-dark);
             overflow-x: hidden;
+            font-weight: 300;
         }
 
-        /* Doodle decorations */
-        .doodle-star {
-            position: absolute;
-            font-size: 24px;
-            animation: twinkle 3s ease-in-out infinite;
-        }
-
-        .doodle-heart {
-            position: absolute;
-            font-size: 20px;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        /* Minimal decorations */
+        .doodle-star, .doodle-heart {
+            display: none; /* Remove for minimalist aesthetic */
         }
 
         @keyframes slideIn {
@@ -87,44 +83,34 @@
 
         /* Intro Screen */
         .intro-screen {
-            max-width: 600px;
+            max-width: 500px;
             margin: 60px auto;
             text-align: center;
-            padding: 40px;
-            background: white;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            border: 3px solid var(--phase-color, #FFB5C2);
+            padding: 50px 40px;
+            background: var(--warm-white);
+            border-radius: 4px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-light);
             position: relative;
             animation: slideIn 0.8s ease-out;
         }
 
-        .intro-screen::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
-            border-radius: 33px;
-            z-index: -1;
-            opacity: 0.2;
-        }
-
         .intro-title {
-            font-family: 'Caveat', cursive;
-            font-size: 56px;
-            font-weight: 700;
-            color: var(--phase-accent, #FF6B9D);
-            margin-bottom: 20px;
-            line-height: 1.2;
+            font-family: 'DM Serif Display', serif;
+            font-size: 42px;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin-bottom: 12px;
+            line-height: 1.3;
+            letter-spacing: -0.02em;
         }
 
         .intro-subtitle {
-            font-size: 20px;
-            color: var(--text-light);
+            font-size: 15px;
+            color: var(--warm-gray);
             margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 0.01em;
         }
 
         .input-group {
@@ -134,52 +120,59 @@
 
         .input-label {
             display: block;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: var(--warm-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
 
         select, input {
             width: 100%;
-            padding: 15px 20px;
-            font-family: 'Mali', cursive;
-            font-size: 18px;
-            border: 3px solid var(--phase-color, #FFB5C2);
-            border-radius: 15px;
+            padding: 14px 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            border: 1px solid var(--border-light);
+            border-radius: 2px;
             background: white;
-            color: var(--text-dark);
+            color: var(--charcoal);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-weight: 300;
         }
 
         select:focus, input:focus {
             outline: none;
-            border-color: var(--phase-accent, #FF6B9D);
-            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+            border-color: var(--phase-accent, #B88B8B);
+            box-shadow: 0 0 0 3px rgba(180, 139, 139, 0.08);
         }
 
         .start-button {
-            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
-            color: white;
+            background: var(--charcoal);
+            color: var(--warm-white);
             border: none;
-            padding: 18px 50px;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 24px;
-            border-radius: 25px;
+            padding: 16px 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 2px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transition: all 0.2s ease;
             margin-top: 20px;
+            font-weight: 500;
         }
 
         .start-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.16);
         }
 
         .start-button:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
         }
 
         /* Main App Layout */
@@ -191,66 +184,67 @@
 
         /* Progress Panel */
         .progress-panel {
-            width: 320px;
-            background: white;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            border: 3px solid var(--phase-color, #FFB5C2);
+            width: 300px;
+            background: var(--warm-white);
+            border-radius: 2px;
+            padding: 30px 24px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-light);
             height: fit-content;
             position: sticky;
             top: 20px;
         }
 
         .panel-header {
-            font-family: 'Caveat', cursive;
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--phase-accent, #FF6B9D);
-            margin-bottom: 20px;
-            text-align: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin-bottom: 24px;
+            text-align: left;
+            letter-spacing: -0.01em;
         }
 
         .phase-badge {
-            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
-            color: white;
-            padding: 12px 20px;
-            border-radius: 15px;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: var(--phase-secondary, #F5EDED);
+            color: var(--phase-accent, #B88B8B);
+            padding: 14px 18px;
+            border-radius: 2px;
+            border: 1px solid var(--phase-primary, #D4A5A5);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            text-align: left;
+            margin-bottom: 24px;
+            font-weight: 400;
         }
 
         .task-item {
-            padding: 12px 15px;
-            margin: 8px 0;
-            border-radius: 12px;
-            background: var(--phase-secondary, #FFF0F3);
-            border-left: 4px solid var(--phase-color, #FFB5C2);
+            padding: 12px 14px;
+            margin: 6px 0;
+            border-radius: 2px;
+            background: transparent;
+            border: 1px solid transparent;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 13px;
         }
 
         .task-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: var(--phase-secondary, #F5EDED);
+            border-color: var(--phase-primary, #D4A5A5);
         }
 
         .task-item.active {
-            background: var(--phase-color, #FFB5C2);
-            color: white;
-            font-weight: 600;
-            animation: celebrate 0.5s ease;
+            background: var(--phase-secondary, #F5EDED);
+            border-color: var(--phase-accent, #B88B8B);
+            font-weight: 400;
         }
 
         .task-item.completed {
-            opacity: 0.6;
-            text-decoration: line-through;
+            opacity: 0.5;
         }
 
         .task-icon {
@@ -265,11 +259,11 @@
         /* Main Content */
         .main-content {
             flex: 1;
-            background: white;
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            border: 3px solid var(--phase-color, #FFB5C2);
+            background: var(--warm-white);
+            border-radius: 2px;
+            padding: 50px 45px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            border: 1px solid var(--border-light);
             position: relative;
             overflow: hidden;
         }
@@ -277,26 +271,29 @@
         .step-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+            align-items: flex-start;
+            margin-bottom: 35px;
             padding-bottom: 20px;
-            border-bottom: 3px dashed var(--phase-color, #FFB5C2);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .step-title {
-            font-family: 'Caveat', cursive;
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--phase-accent, #FF6B9D);
+            font-family: 'DM Serif Display', serif;
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--charcoal);
+            letter-spacing: -0.02em;
         }
 
         .step-time {
-            font-family: 'Patrick Hand', cursive;
-            font-size: 24px;
-            color: var(--phase-accent, #FF6B9D);
-            background: var(--phase-secondary, #FFF0F3);
-            padding: 10px 20px;
-            border-radius: 15px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--warm-gray);
+            background: transparent;
+            padding: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
 
         .step-content {
@@ -304,24 +301,28 @@
         }
 
         .task-description {
-            font-size: 18px;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            color: var(--text-dark);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: var(--warm-gray);
+            font-weight: 300;
         }
 
         .task-list {
-            background: var(--phase-secondary, #FFF0F3);
-            padding: 25px;
-            border-radius: 20px;
-            margin: 20px 0;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            margin: 30px 0;
         }
 
         .task-list h3 {
-            font-family: 'Patrick Hand', cursive;
-            font-size: 24px;
-            color: var(--phase-accent, #FF6B9D);
-            margin-bottom: 15px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: var(--charcoal);
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
 
         .task-list ul {
@@ -330,16 +331,84 @@
         }
 
         .task-list li {
-            padding: 10px 0;
-            padding-left: 30px;
+            padding: 11px 0;
+            padding-left: 0;
             position: relative;
-            font-size: 16px;
+            font-size: 15px;
+            color: var(--charcoal);
+            font-weight: 300;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .task-list li:last-child {
+            border-bottom: none;
         }
 
         .task-list li::before {
-            content: '✨';
+            content: '—';
+            margin-right: 12px;
+            color: var(--warm-gray);
+        }
+
+        /* Workout Checkbox Styling */
+        .workout-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .workout-item:last-child {
+            border-bottom: none;
+        }
+
+        .workout-item:hover {
+            background: var(--phase-secondary, #F5EDED);
+            margin: 0 -8px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .workout-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid var(--warm-gray);
+            border-radius: 2px;
+            margin-right: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .workout-checkbox.checked {
+            background: var(--phase-accent, #B88B8B);
+            border-color: var(--phase-accent, #B88B8B);
+        }
+
+        .workout-checkbox.checked::after {
+            content: '✓';
             position: absolute;
-            left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .workout-text {
+            flex: 1;
+            font-size: 15px;
+            color: var(--charcoal);
+            font-weight: 300;
+        }
+
+        .workout-text.checked {
+            opacity: 0.5;
+            text-decoration: line-through;
         }
 
         /* Action Buttons */
@@ -359,113 +428,100 @@
         }
 
         .nav-button {
-            padding: 12px 24px;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 18px;
-            border: 2px solid var(--phase-color, #FFB5C2);
-            border-radius: 15px;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: 1px solid var(--border-light);
+            border-radius: 2px;
             background: white;
-            color: var(--phase-accent, #FF6B9D);
+            color: var(--charcoal);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
 
         .nav-button:hover:not(:disabled) {
-            background: var(--phase-secondary, #FFF0F3);
-            transform: translateY(-2px);
+            background: var(--phase-secondary, #F5EDED);
+            border-color: var(--phase-primary, #D4A5A5);
         }
 
         .nav-button:disabled {
-            opacity: 0.4;
+            opacity: 0.3;
             cursor: not-allowed;
         }
 
         .action-button {
             flex: 1;
-            max-width: 300px;
-            padding: 20px 30px;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 22px;
+            max-width: 280px;
+            padding: 16px 32px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
             border: none;
-            border-radius: 20px;
+            border-radius: 2px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
             position: relative;
             overflow: hidden;
-        }
-
-        .action-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.3);
-            transition: left 0.5s ease;
-        }
-
-        .action-button:hover::before {
-            left: 100%;
+            font-weight: 500;
         }
 
         .completed-button {
-            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
-            color: white;
+            background: var(--charcoal);
+            color: var(--warm-white);
         }
 
         .completed-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
         }
 
         .skip-button {
-            background: linear-gradient(135deg, #E2E8F0, #CBD5E0);
-            color: var(--text-dark);
+            background: white;
+            color: var(--charcoal);
+            border: 1px solid var(--border-light);
         }
 
         .skip-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+            background: var(--cream);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
         /* Sticky Notes */
         .sticky-note {
-            background: linear-gradient(135deg, #FFF9C4, #FFF59D);
-            padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: var(--phase-secondary, #F5EDED);
+            padding: 32px;
+            border-radius: 2px;
+            border: 1px solid var(--phase-primary, #D4A5A5);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             margin: 30px auto;
-            max-width: 500px;
-            transform: rotate(-1deg);
+            max-width: 480px;
             position: relative;
             animation: slideIn 0.8s ease-out;
         }
 
-        .sticky-note::before {
-            content: '📌';
-            position: absolute;
-            top: -15px;
-            right: 20px;
-            font-size: 30px;
-        }
-
         .sticky-note.success {
-            background: linear-gradient(135deg, #C8E6C9, #A5D6A7);
+            background: #EFF5EF;
+            border-color: #B8CDB8;
         }
 
         .sticky-note.comfort {
-            background: linear-gradient(135deg, #E1BEE7, #CE93D8);
+            background: #F2EEF7;
+            border-color: #C4B5D4;
         }
 
         .sticky-message {
-            font-family: 'Caveat', cursive;
-            font-size: 28px;
-            font-weight: 600;
+            font-family: 'Crimson Pro', serif;
+            font-size: 18px;
+            font-weight: 400;
             text-align: center;
-            color: var(--text-dark);
-            line-height: 1.4;
+            color: var(--charcoal);
+            line-height: 1.6;
         }
 
         .completion-screen {
@@ -474,36 +530,41 @@
         }
 
         .completion-screen h2 {
-            font-family: 'Caveat', cursive;
-            font-size: 64px;
-            font-weight: 700;
-            color: var(--phase-accent, #FF6B9D);
-            margin-bottom: 20px;
+            font-family: 'DM Serif Display', serif;
+            font-size: 42px;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
         }
 
         .completion-screen p {
-            font-size: 22px;
-            line-height: 1.8;
-            color: var(--text-light);
-            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--warm-gray);
+            margin-bottom: 24px;
+            font-weight: 300;
         }
 
         .restart-button {
-            background: linear-gradient(135deg, var(--phase-color, #FFB5C2), var(--phase-accent, #FF6B9D));
-            color: white;
+            background: var(--charcoal);
+            color: var(--warm-white);
             border: none;
-            padding: 18px 50px;
-            font-family: 'Patrick Hand', cursive;
-            font-size: 24px;
-            border-radius: 25px;
+            padding: 16px 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 2px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
 
         .restart-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
         }
 
         .hidden {
@@ -556,8 +617,8 @@
     <div class="container">
         <!-- Intro Screen -->
         <div id="intro-screen" class="intro-screen">
-            <h1 class="intro-title">Daily Flow ✨</h1>
-            <p class="intro-subtitle">Your gentle companion through every phase of your cycle</p>
+            <h1 class="intro-title">Daily Flow</h1>
+            <p class="intro-subtitle">Your gentle companion through every phase</p>
             
             <div class="input-group">
                 <label class="input-label">What day of your cycle are you on?</label>
@@ -580,11 +641,11 @@
 
             <div style="text-align: center; margin-top: 20px;">
                 <button type="button" class="nav-button" onclick="loadSavedData()" id="load-saved-btn" style="display: none;">
-                    Load Previous Session 📂
+                    Load Previous Session
                 </button>
             </div>
             
-            <button class="start-button" onclick="startApp()">Let's Begin! 🌸</button>
+            <button class="start-button" onclick="startApp()">Begin</button>
         </div>
 
         <!-- Main App (Hidden Initially) -->
@@ -1282,15 +1343,23 @@
             // Add gym info if this is movement time
             let gymSection = '';
             if (step.title.includes('Movement') || step.title.includes('Gym') || step.title.includes('Training')) {
+                const workoutKey = `workout_${currentDay}_${currentStepIndex}`;
+                const savedWorkouts = JSON.parse(localStorage.getItem(workoutKey) || '[]');
+
                 gymSection = `
-                    <div class="task-list">
+                    <div class="task-list" style="margin-top: 40px;">
                         <h3>${gym.icon} Today's Workout: ${gym.name}</h3>
-                        <ul>
-                            ${gym.exercises.map(ex => `<li>${ex}</li>`).join('')}
-                        </ul>
-                        <p style="margin-top: 15px; font-style: italic; color: var(--text-light);">
-                            ${currentPhase === 'menstrual' || currentPhase === 'luteal' 
-                                ? 'Remember: Modify as needed. Lighter weights and reduced sets are perfectly fine today.' 
+                        <div id="workout-list">
+                            ${gym.exercises.map((ex, idx) => `
+                                <div class="workout-item" onclick="toggleWorkout(${idx}, '${workoutKey}')">
+                                    <div class="workout-checkbox ${savedWorkouts.includes(idx) ? 'checked' : ''}" id="checkbox-${idx}"></div>
+                                    <div class="workout-text ${savedWorkouts.includes(idx) ? 'checked' : ''}" id="text-${idx}">${ex}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <p style="margin-top: 20px; font-size: 14px; color: var(--warm-gray); font-weight: 300;">
+                            ${currentPhase === 'menstrual' || currentPhase === 'luteal'
+                                ? 'Remember: Modify as needed. Lighter weights and reduced sets are perfectly fine today.'
                                 : 'You\'ve got the energy for this! Focus on form and progressive overload.'}
                         </p>
                     </div>
@@ -1306,7 +1375,7 @@
                         Next →
                     </button>
                     <button class="nav-button" onclick="resetApp()" style="margin-left: auto;">
-                        🏠 Start Over
+                        Reset
                     </button>
                 </div>
                 <div class="step-header">
@@ -1322,10 +1391,10 @@
                     ${gymSection}
                     <div class="action-buttons">
                         <button class="action-button completed-button" onclick="completeStep()">
-                            ✓ Completed! 🎉
+                            Completed
                         </button>
                         <button class="action-button skip-button" onclick="skipStep()">
-                            Couldn't do it 💙
+                            Skip
                         </button>
                     </div>
                 </div>
@@ -1340,6 +1409,26 @@
             if (confirm('Are you sure you want to start over? This will clear your progress.')) {
                 localStorage.removeItem('dailyFlowSession');
                 location.reload();
+            }
+        }
+
+        function toggleWorkout(exerciseIndex, workoutKey) {
+            const savedWorkouts = JSON.parse(localStorage.getItem(workoutKey) || '[]');
+            const checkbox = document.getElementById(`checkbox-${exerciseIndex}`);
+            const text = document.getElementById(`text-${exerciseIndex}`);
+
+            if (savedWorkouts.includes(exerciseIndex)) {
+                // Remove from completed
+                const newWorkouts = savedWorkouts.filter(idx => idx !== exerciseIndex);
+                localStorage.setItem(workoutKey, JSON.stringify(newWorkouts));
+                checkbox.classList.remove('checked');
+                text.classList.remove('checked');
+            } else {
+                // Add to completed
+                savedWorkouts.push(exerciseIndex);
+                localStorage.setItem(workoutKey, JSON.stringify(savedWorkouts));
+                checkbox.classList.add('checked');
+                text.classList.add('checked');
             }
         }
 
@@ -1447,7 +1536,7 @@
                         </div>
                     </div>
                     <button class="restart-button" onclick="location.reload()">
-                        Start New Day 🌸
+                        Start New Day
                     </button>
                 </div>
             `;
