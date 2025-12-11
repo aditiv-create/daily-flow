@@ -571,37 +571,431 @@
             display: none;
         }
 
-        /* Mobile Responsiveness */
+        /* Compact Mode */
+        .compact-mode .main-content {
+            padding: 30px 25px;
+        }
+
+        .compact-mode .task-list li {
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .compact-mode .step-title {
+            font-size: 30px;
+        }
+
+        .compact-mode .task-description {
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
+            .compact-mode .main-content {
+                padding: 20px 16px;
+            }
+
+            .compact-mode .step-title {
+                font-size: 24px;
+            }
+        }
+
+        /* Settings Modal */
+        .settings-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: var(--warm-white);
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            z-index: 1000;
+            transition: all 0.2s ease;
+        }
+
+        .settings-icon:hover {
+            background: var(--phase-secondary, #F5EDED);
+            transform: rotate(90deg);
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .settings-content {
+            background: var(--warm-white);
+            border-radius: 2px;
+            border: 1px solid var(--border-light);
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 40px 36px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.16);
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .settings-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: var(--charcoal);
+            letter-spacing: -0.02em;
+        }
+
+        .close-settings {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--warm-gray);
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .close-settings:hover {
+            color: var(--charcoal);
+        }
+
+        .settings-section {
+            margin-bottom: 32px;
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--charcoal);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .settings-option {
+            margin-bottom: 16px;
+        }
+
+        .settings-option label {
+            display: block;
+            font-size: 14px;
+            color: var(--warm-gray);
+            margin-bottom: 8px;
+            font-weight: 300;
+        }
+
+        .color-picker-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .color-option {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: var(--charcoal);
+        }
+
+        .color-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: var(--light-gray);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--phase-accent, #B88B8B);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(22px);
+        }
+
+        @media (max-width: 768px) {
+            .settings-icon {
+                top: 16px;
+                right: 16px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .settings-content {
+                padding: 32px 24px;
+                max-height: 90vh;
+            }
+
+            .settings-title {
+                font-size: 24px;
+            }
+
+            .color-picker-group {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            body {
+                background-size: 15px 15px;
+                background-image:
+                    repeating-linear-gradient(0deg, transparent, transparent 14px, var(--border-light) 14px, var(--border-light) 15px),
+                    repeating-linear-gradient(90deg, transparent, transparent 14px, var(--border-light) 14px, var(--border-light) 15px);
+            }
+
+            .container {
+                padding: 12px;
+            }
+
             .app-layout {
                 flex-direction: column;
+                gap: 16px;
             }
 
             .progress-panel {
                 width: 100%;
                 position: static;
+                padding: 20px 18px;
+                margin-bottom: 0;
+                order: 2;
+            }
+
+            .panel-header {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+
+            .phase-badge {
+                font-size: 12px;
+                padding: 12px 16px;
+                margin-bottom: 16px;
+            }
+
+            .task-item {
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+
+            .task-icon {
+                font-size: 16px;
             }
 
             .main-content {
-                padding: 25px;
+                padding: 24px 20px;
+                order: 1;
             }
 
             .step-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 8px;
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+            }
+
+            .step-title {
+                font-size: 28px;
+            }
+
+            .step-time {
+                font-size: 11px;
+            }
+
+            .task-description {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .task-list {
+                margin: 20px 0;
+            }
+
+            .task-list h3 {
+                font-size: 12px;
+                margin-bottom: 14px;
+            }
+
+            .task-list li {
+                font-size: 14px;
+                padding: 9px 0;
+            }
+
+            .workout-item {
+                padding: 10px 0;
+            }
+
+            .workout-text {
+                font-size: 14px;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 16px;
+            }
+
+            .nav-button {
+                font-size: 11px;
+                padding: 10px 16px;
+            }
+
+            .nav-button[onclick*="resetApp"] {
+                width: 100%;
+                margin-left: 0 !important;
+                margin-top: 4px;
             }
 
             .action-buttons {
                 flex-direction: column;
+                gap: 12px;
+                margin-top: 30px;
             }
 
             .action-button {
                 max-width: 100%;
+                width: 100%;
+                padding: 14px 28px;
+                font-size: 12px;
+            }
+
+            .intro-screen {
+                margin: 30px auto;
+                padding: 32px 24px;
             }
 
             .intro-title {
-                font-size: 42px;
+                font-size: 32px;
+            }
+
+            .intro-subtitle {
+                font-size: 14px;
+            }
+
+            .input-label {
+                font-size: 12px;
+            }
+
+            select, input {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+
+            .start-button {
+                font-size: 13px;
+                padding: 14px 36px;
+            }
+
+            .sticky-note {
+                padding: 24px;
+                margin: 20px auto;
+            }
+
+            .sticky-message {
+                font-size: 16px;
+            }
+
+            .completion-screen {
+                padding: 40px 24px;
+            }
+
+            .completion-screen h2 {
+                font-size: 32px;
+            }
+
+            .completion-screen p {
+                font-size: 15px;
+            }
+
+            /* Better touch targets for mobile */
+            .task-item, .workout-item, .nav-button, .action-button {
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+                touch-action: manipulation;
+            }
+
+            /* Prevent zoom on input focus */
+            select, input {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 375px) {
+            .step-title {
+                font-size: 24px;
+            }
+
+            .main-content {
+                padding: 20px 16px;
+            }
+
+            .intro-title {
+                font-size: 28px;
             }
         }
     </style>
@@ -613,6 +1007,58 @@
     <div class="doodle-heart" style="top: 40%; left: 5%;">💖</div>
     <div class="doodle-heart" style="top: 60%; right: 8%;">💕</div>
     <div class="doodle-star" style="bottom: 10%; left: 20%;">✨</div>
+
+    <!-- Settings Icon -->
+    <div class="settings-icon" onclick="openSettings()" id="settings-btn">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="10" cy="10" r="3"/>
+            <path d="M10 1v2m0 14v2M4.22 4.22l1.42 1.42m8.68 8.68l1.42 1.42M1 10h2m14 0h2M4.22 15.78l1.42-1.42m8.68-8.68l1.42-1.42"/>
+        </svg>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="settings-modal hidden" onclick="closeSettings(event)">
+        <div class="settings-content" onclick="event.stopPropagation()">
+            <div class="settings-header">
+                <h2 class="settings-title">Settings</h2>
+                <button class="close-settings" onclick="closeSettings()">×</button>
+            </div>
+
+            <div class="settings-section">
+                <h3 class="settings-section-title">Accent Color</h3>
+                <div class="color-picker-group">
+                    <div class="color-option selected" style="background: linear-gradient(135deg, #D4A5A5, #B88B8B);" onclick="changeAccentColor('rose')" data-color="rose"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #C4B5D4, #9D88B3);" onclick="changeAccentColor('lavender')" data-color="lavender"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #B8CDB8, #8FAA8F);" onclick="changeAccentColor('sage')" data-color="sage"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #E8D5B7, #C9A86A);" onclick="changeAccentColor('sand')" data-color="sand"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #B8D4E0, #7FA8BA);" onclick="changeAccentColor('sky')" data-color="sky"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #E0C5B8, #C09A87);" onclick="changeAccentColor('terracotta')" data-color="terracotta"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #C9C5D4, #A39DB3);" onclick="changeAccentColor('mauve')" data-color="mauve"></div>
+                    <div class="color-option" style="background: linear-gradient(135deg, #D4C5A5, #B3A186);" onclick="changeAccentColor('olive')" data-color="olive"></div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3 class="settings-section-title">Display Options</h3>
+                <div class="settings-option" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="margin: 0;">Show Phase Icons</label>
+                    <div class="toggle-switch active" onclick="toggleSetting('showIcons')" id="toggle-icons"></div>
+                </div>
+                <div class="settings-option" style="display: flex; justify-content: space-between; align-items: center;">
+                    <label style="margin: 0;">Compact Mode</label>
+                    <div class="toggle-switch" onclick="toggleSetting('compactMode')" id="toggle-compact"></div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3 class="settings-section-title">Cycle Length</h3>
+                <div class="settings-option">
+                    <label>Average cycle length (days)</label>
+                    <input type="number" id="cycle-length" min="21" max="35" value="28" style="width: 100%;" onchange="updateCycleLength(this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <!-- Intro Screen -->
@@ -1544,6 +1990,106 @@
             document.getElementById('step-content').innerHTML = completion;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Settings Functions
+        const colorThemes = {
+            rose: { primary: '#D4A5A5', secondary: '#F5EDED', accent: '#B88B8B' },
+            lavender: { primary: '#C4B5D4', secondary: '#F2EEF7', accent: '#9D88B3' },
+            sage: { primary: '#B8CDB8', secondary: '#EFF5EF', accent: '#8FAA8F' },
+            sand: { primary: '#E8D5B7', secondary: '#F9F5ED', accent: '#C9A86A' },
+            sky: { primary: '#B8D4E0', secondary: '#EFF6F9', accent: '#7FA8BA' },
+            terracotta: { primary: '#E0C5B8', secondary: '#F9F2EF', accent: '#C09A87' },
+            mauve: { primary: '#C9C5D4', secondary: '#F2F0F7', accent: '#A39DB3' },
+            olive: { primary: '#D4C5A5', secondary: '#F7F3ED', accent: '#B3A186' }
+        };
+
+        function openSettings() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+            loadSettings();
+        }
+
+        function closeSettings(event) {
+            if (!event || event.target.classList.contains('settings-modal') || event.target.classList.contains('close-settings')) {
+                document.getElementById('settings-modal').classList.add('hidden');
+            }
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{"accentColor": "rose", "showIcons": true, "compactMode": false, "cycleLength": 28}');
+
+            // Load accent color
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.color === settings.accentColor) {
+                    option.classList.add('selected');
+                }
+            });
+
+            // Load toggles
+            document.getElementById('toggle-icons').classList.toggle('active', settings.showIcons);
+            document.getElementById('toggle-compact').classList.toggle('active', settings.compactMode);
+            document.getElementById('cycle-length').value = settings.cycleLength;
+
+            // Apply compact mode if enabled
+            if (settings.compactMode) {
+                document.body.classList.add('compact-mode');
+            }
+        }
+
+        function changeAccentColor(color) {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{}');
+            settings.accentColor = color;
+            localStorage.setItem('dailyFlowSettings', JSON.stringify(settings));
+
+            // Update color options
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.color === color) {
+                    option.classList.add('selected');
+                }
+            });
+
+            // Apply colors to current phase
+            const theme = colorThemes[color];
+            if (currentPhase) {
+                document.documentElement.style.setProperty('--phase-color', theme.primary);
+                document.documentElement.style.setProperty('--phase-secondary', theme.secondary);
+                document.documentElement.style.setProperty('--phase-accent', theme.accent);
+                renderProgressPanel();
+            }
+        }
+
+        function toggleSetting(settingName) {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{"showIcons": true, "compactMode": false}');
+            settings[settingName] = !settings[settingName];
+            localStorage.setItem('dailyFlowSettings', JSON.stringify(settings));
+
+            const toggle = document.getElementById(`toggle-${settingName === 'showIcons' ? 'icons' : 'compact'}`);
+            toggle.classList.toggle('active');
+
+            if (settingName === 'compactMode') {
+                document.body.classList.toggle('compact-mode', settings.compactMode);
+            } else if (settingName === 'showIcons') {
+                if (currentPhase) {
+                    renderProgressPanel();
+                    showStep(currentStepIndex);
+                }
+            }
+        }
+
+        function updateCycleLength(length) {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{}');
+            settings.cycleLength = parseInt(length);
+            localStorage.setItem('dailyFlowSettings', JSON.stringify(settings));
+        }
+
+        // Load settings on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const settings = JSON.parse(localStorage.getItem('dailyFlowSettings') || '{"compactMode": false}');
+            if (settings.compactMode) {
+                document.body.classList.add('compact-mode');
+            }
+        });
     </script>
 </body>
 </html>
