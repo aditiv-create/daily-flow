@@ -1017,8 +1017,8 @@
     </div>
 
     <!-- Settings Modal -->
-    <div id="settings-modal" class="settings-modal hidden" onclick="closeSettings(event)">
-        <div class="settings-content" onclick="event.stopPropagation()">
+    <div id="settings-modal" class="settings-modal hidden" onclick="if(event.target === this) closeSettings()">
+        <div class="settings-content">
             <div class="settings-header">
                 <h2 class="settings-title">Settings</h2>
                 <button class="close-settings" onclick="closeSettings()">×</button>
@@ -2209,12 +2209,10 @@
         }
 
         function closeSettings(event) {
-            // Allow closing via: no event (button click), clicking backdrop, clicking X, or pressing Escape
-            if (!event || event.target === event.currentTarget || event.target.classList.contains('settings-modal') || event.target.classList.contains('close-settings')) {
-                document.getElementById('settings-modal').classList.add('hidden');
-                // Remove escape key listener
-                document.removeEventListener('keydown', handleEscapeKey);
-            }
+            // Close the modal
+            document.getElementById('settings-modal').classList.add('hidden');
+            // Remove escape key listener
+            document.removeEventListener('keydown', handleEscapeKey);
         }
 
         function handleEscapeKey(e) {
