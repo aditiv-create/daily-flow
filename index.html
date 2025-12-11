@@ -2204,11 +2204,22 @@
         function openSettings() {
             document.getElementById('settings-modal').classList.remove('hidden');
             loadSettings();
+            // Add escape key listener
+            document.addEventListener('keydown', handleEscapeKey);
         }
 
         function closeSettings(event) {
-            if (!event || event.target.classList.contains('settings-modal') || event.target.classList.contains('close-settings')) {
+            // Allow closing via: no event (button click), clicking backdrop, clicking X, or pressing Escape
+            if (!event || event.target === event.currentTarget || event.target.classList.contains('settings-modal') || event.target.classList.contains('close-settings')) {
                 document.getElementById('settings-modal').classList.add('hidden');
+                // Remove escape key listener
+                document.removeEventListener('keydown', handleEscapeKey);
+            }
+        }
+
+        function handleEscapeKey(e) {
+            if (e.key === 'Escape') {
+                closeSettings();
             }
         }
 
